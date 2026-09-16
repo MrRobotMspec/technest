@@ -1,2 +1,0 @@
-# technest
-tech nest website 
