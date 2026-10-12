@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Nest | Digital Solutions for South African Businesses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* ---- BEIGE, BROWN, METALLIC GREY AESTHETIC ---- */
+            --bg-primary: #F5F1ED;
+            --bg-secondary: #E6DFD7;
+            --surface-1: #D9D0C5;
+            --surface-2: #C4B9AC;
+            --brown-dark: #4A3F35;
+            --brown-medium: #7A6A58;
+            --brown-warm: #9C8B7A;
+            --metal-light: #B8B2A8;
+            --metal-mid: #8F8A81;
+            --metal-dark: #5C5954;
+            --text-primary: #2E2A26;
+            --text-secondary: #5A5249;
+            --text-light: #F5F1ED;
+            --accent-brown: #8B7355;
+            --accent-grey: #A8A8A8;
+            --whatsapp-green: #25D366;
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== PRELOADER ===== */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            color: var(--brown-medium);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .preloader-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(74, 63, 53, 0.15);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .preloader-bar-inner {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            border-radius: 3px;
+            animation: loadBar 1.8s ease-in-out forwards;
+        }
+
+        @keyframes loadBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+            background: transparent;
+        }
+
+        .nav.scrolled {
+            background: rgba(245, 241, 237, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-logo span {
+            color: var(--brown-medium);
+        }
+
+        .nav-logo i {
+            color: var(--brown-warm);
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--brown-medium);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--brown-dark);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED !important;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600 !important;
+            transition: var(--transition);
+            box-shadow: 0 8px 20px -5px rgba(122, 106, 88, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px -5px rgba(122, 106, 88, 0.5);
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 6rem 3rem 3rem;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .hero-bg-shapes {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.06;
+            animation: floatShape 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--brown-medium);
+            top: -10%;
+            right: -5%;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--metal-mid);
+            bottom: -15%;
+            left: -5%;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--brown-warm);
+            top: 40%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatShape {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.95); }
+            75% { transform: translate(20px, 20px) scale(1.05); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-tagline {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--brown-medium);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+        }
+
+        .hero-tagline::before {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: var(--brown-medium);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+            color: var(--text-primary);
+        }
+
+        .hero h1 .highlight {
+            color: var(--brown-medium);
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.7s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.9s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            letter-spacing: 0.02em;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED;
+            box-shadow: 0 10px 30px -8px rgba(122, 106, 88, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 40px -10px rgba(122, 106, 88, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--metal-light);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--brown-medium);
+            color: var(--brown-medium);
+            transform: translateY(-3px);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.3s forwards;
+        }
+
+        .hero-scroll .line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--brown-medium), transparent);
+            animation: scrollLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            50.1% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== MARQUEE ===== */
+        .marquee-section {
+            padding: 2rem 0;
+            border-top: 1px solid rgba(74, 63, 53, 0.08);
+            border-bottom: 1px solid rgba(74, 63, 53, 0.08);
+            overflow: hidden;
+            background: rgba(230, 223, 215, 0.3);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 3rem;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-item {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: rgba(74, 63, 53, 0.25);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .marquee-item i {
+            color: var(--brown-medium);
+            font-size: 0.7rem;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== SECTION STYLES ===== */
+        .section {
+            padding: 6rem 3rem;
+            position: relative;
+            background: var(--bg-primary);
+        }
+
+        .section-header {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--brown-medium);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 30px;
+            height: 2px;
+            background: var(--brown-medium);
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            max-width: 700px;
+            color: var(--text-primary);
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 1000px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(74, 63, 53, 0.08);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            background: var(--surface-1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--brown-medium);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ===== PORTFOLIO ===== */
+        .work-filters {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.3rem;
+            border-radius: 50px;
+            background: transparent;
+            border: 1px solid var(--metal-light);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--brown-medium);
+            border-color: var(--brown-medium);
+            color: #F5F1ED;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 900px;
+        }
+
+        .work-item {
+            display: block;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--surface-1);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .work-item.hidden {
+            display: none;
+        }
+
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .work-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .work-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(74, 63, 53, 0.95) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.8rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .work-item:hover .work-overlay {
+            opacity: 1;
+        }
+
+        .work-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--metal-light);
+            margin-bottom: 0.4rem;
+        }
+
+        .work-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #F5F1ED;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .work-title .external-icon {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .work-item:hover .work-title .external-icon {
+            opacity: 1;
+            transform: translate(2px, -2px);
+        }
+
+        .work-description {
+            font-size: 0.8rem;
+            color: var(--bg-secondary);
+        }
+
+        .work-placeholder-2 { background: linear-gradient(135deg, #7A6A58, #B8B2A8); }
+        .work-placeholder-4 { background: linear-gradient(135deg, #8B7355, #A89B8A); }
+
+        /* ===== SERVICES ===== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1100px;
+        }
+
+        .service-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(74, 63, 53, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            background: var(--surface-1);
+            transform: translateY(-8px);
+            border-color: rgba(122, 106, 88, 0.25);
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(122, 106, 88, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--brown-medium);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(-5deg);
+            background: var(--brown-medium);
+            color: #F5F1ED;
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .services-grid .service-card:nth-child(4) {
+            grid-column: 1 / 2;
+        }
+        .services-grid .service-card:nth-child(5) {
+            grid-column: 2 / 3;
+        }
+
+        /* ===== PROCESS ===== */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--metal-light);
+            font-size: 1.5rem;
+        }
+
+        .process-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--brown-medium);
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .process-step h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .process-step p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonial-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(74, 63, 53, 0.08);
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .testimonial-slide {
+            min-width: 100%;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .testimonial-quote {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.7;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--brown-medium);
+            line-height: 0;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .testimonial-role {
+            font-size: 0.85rem;
+            color: var(--brown-medium);
+            margin-top: 0.2rem;
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--metal-light);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0;
+        }
+
+        .testimonial-dot.active {
+            background: var(--brown-medium);
+            width: 30px;
+            border-radius: 10px;
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .contact-info p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+
+        .whatsapp-qr-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(74, 63, 53, 0.08);
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 340px;
+            transition: var(--transition);
+        }
+
+        .whatsapp-qr-card:hover {
+            background: var(--surface-1);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -15px rgba(0,0,0,0.15);
+        }
+
+        .whatsapp-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--whatsapp-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 20px -5px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-qr-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--text-primary);
+        }
+
+        .whatsapp-qr-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .qr-code-wrapper {
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -10px rgba(0,0,0,0.15);
+            margin-bottom: 1.2rem;
+            line-height: 0;
+        }
+
+        .qr-code-wrapper img {
+            display: block;
+            width: 180px;
+            height: 180px;
+            border-radius: 6px;
+        }
+
+        .whatsapp-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(37, 211, 102, 0.1);
+            color: var(--whatsapp-green);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .whatsapp-number:hover {
+            background: rgba(37, 211, 102, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .whatsapp-number i {
+            font-size: 1rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(74, 63, 53, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.03em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            border-radius: 12px;
+            border: 1px solid var(--metal-light);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--brown-medium);
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(122, 106, 88, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -8px rgba(122, 106, 88, 0.4);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-success {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .form-success.visible {
+            display: flex;
+        }
+
+        .form-success i {
+            font-size: 3rem;
+            color: var(--brown-medium);
+            margin-bottom: 1rem;
+        }
+
+        .form-success h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-success p {
+            color: var(--text-secondary);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 3rem;
+            border-top: 1px solid rgba(74, 63, 53, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            background: var(--bg-primary);
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-logo span {
+            color: var(--brown-medium);
+        }
+
+        .footer-copy {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .work-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .services-grid .service-card:nth-child(4),
+            .services-grid .service-card:nth-child(5) {
+                grid-column: auto;
+            }
+            .process-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .process-step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+            .nav.scrolled {
+                padding: 0.8rem 1.5rem;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(245, 241, 237, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+                transition: right 0.4s ease;
+                padding: 2rem;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            .nav-links.open {
+                right: 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+            .hero {
+                padding: 5rem 1.5rem 2rem;
+            }
+            .section {
+                padding: 4rem 1.5rem;
+            }
+            .work-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .whatsapp-qr-card {
+                max-width: 100%;
+            }
+            .testimonial-slide {
+                padding: 2rem 1.5rem;
+            }
+            .testimonial-quote {
+                font-size: 1.05rem;
+            }
+            .footer {
+                padding: 2rem 1.5rem;
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .contact-form {
+                padding: 1.5rem;
+            }
+            .btn {
+                padding: 0.8rem 1.6rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PRELOADER ===== -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">TECH NEST</div>
+        <div class="preloader-bar">
+            <div class="preloader-bar-inner"></div>
+        </div>
+    </div>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">
+            <i class="fas fa-leaf"></i>
+            <span>Tech</span> Nest
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#work">Work</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact" class="nav-cta">Start a Project</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-tagline">Digital Solutions for South African Business</div>
+            <h1>Technology That <span class="highlight">Works for Your Business.</span></h1>
+            <p>From your first website to your next digital platform — Tech Nest builds technology around the way your business works. Websites, web applications, digital infrastructure, and growth solutions for SMEs, startups, and organizations.</p>
+            <div class="hero-actions">
+                <a href="#work" class="btn btn-primary">
+                    <i class="fas fa-eye"></i> View Our Work
+                </a>
+                <a href="#contact" class="btn btn-outline">
+                    <i class="fas fa-paper-plane"></i> Discuss Your Project
+                </a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="line"></div>
+        </div>
+    </section>
+
+    <!-- ===== MARQUEE ===== -->
+    <div class="marquee-section">
+        <div class="marquee-track" id="marqueeTrack">
+            <div class="marquee-item"><i class="fas fa-circle"></i> Web Development</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> UI/UX Design</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> Digital Infrastructure</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> E-commerce</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> Business Systems</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> SEO Optimization</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> Website Maintenance</div>
+            <div class="marquee-item"><i class="fas fa-circle"></i> Microsoft 365</div>
+        </div>
+    </div>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section" id="about">
+        <div class="section-header reveal">
+            <div class="section-label">Why Tech Nest</div>
+            <h2 class="section-title">We design, develop, and connect digital solutions that help businesses establish, operate and grow online.</h2>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-label">Projects Completed</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="2">0</div>
+                <div class="stat-label">Business Clients</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="4">0</div>
+                <div class="stat-label">Successful Deployments</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PORTFOLIO ===== -->
+    <section class="section" id="work">
+        <div class="section-header reveal">
+            <div class="section-label">Our Work</div>
+            <h2 class="section-title">Projects that demonstrate capability.</h2>
+        </div>
+        <div class="work-filters reveal">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="web">Websites</button>
+            <button class="filter-btn" data-filter="app">Web Applications</button>
+        </div>
+        <div class="work-grid" id="workGrid">
+            <!-- BrokerBridge → EXTERNAL NETLIFY LINK -->
+            <a href="https://brokerbridge.netlify.app" target="_blank" rel="noopener noreferrer" class="work-item reveal" data-category="app">
+                <div class="work-placeholder-2" style="width:100%;height:100%;"></div>
+                <div class="work-overlay">
+                    <div class="work-category">Web Application</div>
+                    <div class="work-title">BrokerBridge <i class="fas fa-external-link-alt external-icon"></i></div>
+                    <div class="work-description">Digital platform connecting brokers to institutions and streamlining workflows</div>
+                </div>
+            </a>
+            <!-- MCUSI Collective → EXTERNAL GITHUB PAGES LINK -->
+            <a href="https://mrrobotmspec.github.io/mcusicollective/" target="_blank" rel="noopener noreferrer" class="work-item reveal" data-category="web">
+                <div class="work-placeholder-4" style="width:100%;height:100%;"></div>
+                <div class="work-overlay">
+                    <div class="work-category">Creative Collective</div>
+                    <div class="work-title">MCUSI Collective <i class="fas fa-external-link-alt external-icon"></i></div>
+                    <div class="work-description">A digital home for a South African creative collective — showcasing artists, projects and community.</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section class="section" id="services" style="background: rgba(230, 223, 215, 0.3);">
+        <div class="section-header reveal">
+            <div class="section-label">Services</div>
+            <h2 class="section-title">Complete digital solutions for your business.</h2>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-icon"><i class="fas fa-pencil-ruler"></i></div>
+                <h3>We Design</h3>
+                <p>Professional websites and digital experiences that communicate your brand and engage your audience.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i class="fas fa-code"></i></div>
+                <h3>We Develop</h3>
+                <p>Websites, web applications and e-commerce platforms built on modern technology that performs.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i class="fas fa-globe"></i></div>
+                <h3>We Connect</h3>
+                <p>Domains, hosting, email, Microsoft 365 and digital infrastructure that keeps your business online.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>We Optimise</h3>
+                <p>SEO, performance improvements and website optimization to help you reach and attract the right customers.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i class="fas fa-headset"></i></div>
+                <h3>We Support</h3>
+                <p>Ongoing technical assistance, website updates and maintenance to keep everything running smoothly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROCESS ===== -->
+    <section class="section">
+        <div class="section-header reveal">
+            <div class="section-label">Process</div>
+            <h2 class="section-title">How we work with you.</h2>
+        </div>
+        <div class="process-grid">
+            <div class="process-step reveal">
+                <div class="process-number">01</div>
+                <h4>Understand</h4>
+                <p>We learn about your business, goals and requirements.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="process-number">02</div>
+                <h4>Design</h4>
+                <p>We create professional designs around your brand and vision.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="process-number">03</div>
+                <h4>Build</h4>
+                <p>We develop and deploy your solution with attention to detail.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="process-number">04</div>
+                <h4>Test</h4>
+                <p>We ensure everything works perfectly across all devices.</p>
+            </div>
+            <div class="process-step reveal">
+                <div class="process-number">05</div>
+                <h4>Launch</h4>
+                <p>We deploy and support your digital solution going live.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="section" id="testimonials" style="background: rgba(230, 223, 215, 0.3);">
+        <div class="section-header reveal">
+            <div class="section-label">Client Feedback</div>
+            <h2 class="section-title">What our clients say.</h2>
+        </div>
+        <div class="testimonial-slider reveal">
+            <div class="testimonial-track" id="testimonialTrack">
+                <div class="testimonial-slide">
+                    <div class="testimonial-quote">Tech Nest understood exactly what we needed. They delivered a website that actually reflects who we are and connects with our community.</div>
+                    <div class="testimonial-author">Founder, Wellness Business</div>
+                    <div class="testimonial-role">Trust the Process</div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-quote">From concept to platform. Tech Nest took our business idea and built a digital solution that actually works for our team and our clients.</div>
+                    <div class="testimonial-author">Director, Insurance Technology</div>
+                    <div class="testimonial-role">BrokerBridge</div>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="testimonial-quote">Professional, responsive, and genuinely interested in solving our business problems. Tech Nest feels like an extension of our team.</div>
+                    <div class="testimonial-author">Business Owner, South Africa</div>
+                    <div class="testimonial-role">Multiple Projects</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-nav" id="testimonialNav">
+            <button class="testimonial-dot active" data-index="0"></button>
+            <button class="testimonial-dot" data-index="1"></button>
+            <button class="testimonial-dot" data-index="2"></button>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT (WhatsApp QR + Working Form) ===== -->
+    <section class="section" id="contact">
+        <div class="section-header reveal">
+            <div class="section-label">Get Started</div>
+            <h2 class="section-title">Let's build your digital presence.</h2>
+        </div>
+        <div class="contact-wrapper">
+            <div class="contact-info reveal">
+                <h3>Start your project with Tech Nest.</h3>
+                <p>Scan the WhatsApp QR code below to chat with us instantly, or fill in the form and we'll get back to you.</p>
+
+                <!-- WhatsApp QR Code Card -->
+                <div class="whatsapp-qr-card">
+                    <div class="whatsapp-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h4>Chat on WhatsApp</h4>
+                    <p>Scan with your phone camera to start a conversation</p>
+                    <div class="qr-code-wrapper">
+                        <img
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F27634484882"
+                            alt="WhatsApp QR code to chat with Tech Nest"
+                            width="180"
+                            height="180"
+                        >
+                    </div>
+                    <a href="https://wa.me/27634484882" target="_blank" rel="noopener noreferrer" class="whatsapp-number">
+                        <i class="fab fa-whatsapp"></i> 063 448 4882
+                    </a>
+                </div>
+            </div>
+            <div class="contact-form reveal">
+                <!--
+                  FormSubmit.co sends the form data to your email.
+                  IMPORTANT: The first submission triggers a confirmation email from FormSubmit.
+                  Click the link in that email ONCE to activate the form.
+                -->
+                <form id="contactForm" action="https://formsubmit.co/morokemakgalemele@gmail.com" method="POST" novalidate>
+                    <!-- FormSubmit configuration -->
+                    <input type="hidden" name="_subject" value="New Project Enquiry — Tech Nest Website">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="https://technest.co.za/#contact">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="you@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="business">Business Type</label>
+                        <input type="text" id="business" name="business" placeholder="e.g. Wellness, E-commerce, Services" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Project Details</label>
+                        <textarea id="message" name="message" placeholder="Tell us about your project and what you're hoping to achieve..." required></textarea>
+                    </div>
+                    <button type="submit" class="form-submit" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+                <div class="form-success" id="formSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Message Received!</h4>
+                    <p>Thank you. We'll be in touch within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-logo">
+            <i class="fas fa-leaf"></i>
+            <span>Tech</span> Nest
+        </div>
+        <div class="footer-copy">© 2025 Tech Nest. Technology that works for your business. Johannesburg, South Africa.</div>
+    </footer>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // Preloader
+            const preloader = document.getElementById('preloader');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                }, 1800);
+            });
+
+            // Navigation scroll
+            const nav = document.getElementById('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('open');
+            });
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('open');
+                });
+            });
+
+            // Scroll reveal
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // Animated counters
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.getAttribute('data-target'));
+                        let current = 0;
+                        const increment = target / 60;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                el.textContent = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                el.textContent = target;
+                            }
+                        };
+                        updateCounter();
+                        counterObserver.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.5 });
+            statNumbers.forEach(el => counterObserver.observe(el));
+
+            // Portfolio filter
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const workItems = document.querySelectorAll('.work-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.getAttribute('data-filter');
+
+                    workItems.forEach(item => {
+                        const category = item.getAttribute('data-category');
+                        if (filter === 'all' || category === filter) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Testimonials
+            const track = document.getElementById('testimonialTrack');
+            const dots = document.querySelectorAll('.testimonial-dot');
+            let currentSlide = 0;
+            const totalSlides = dots.length;
+
+            function goToSlide(index) {
+                currentSlide = index;
+                track.style.transform = `translateX(-${index * 100}%)`;
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const index = parseInt(dot.getAttribute('data-index'));
+                    goToSlide(index);
+                });
+            });
+
+            let autoSlideInterval = setInterval(() => {
+                goToSlide((currentSlide + 1) % totalSlides);
+            }, 5000);
+
+            document.querySelector('.testimonial-slider').addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+            document.querySelector('.testimonial-slider').addEventListener('mouseleave', () => {
+                autoSlideInterval = setInterval(() => {
+                    goToSlide((currentSlide + 1) % totalSlides);
+                }, 5000);
+            });
+
+            // Contact form — real submission via FormSubmit.co
+            const form = document.getElementById('contactForm');
+            const formSuccess = document.getElementById('formSuccess');
+            const submitBtn = document.getElementById('submitBtn');
+
+            form.addEventListener('submit', (e) => {
+                // Basic validation
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    form.reportValidity();
+                    return;
+                }
+
+                // Show sending state, let the browser submit to FormSubmit.co
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+                // The form will now POST to FormSubmit.co,
+                // which forwards the details to morokemakgalemele@gmail.com
+            });
+
+            // Marquee
+            const marqueeTrack = document.getElementById('marqueeTrack');
+            marqueeTrack.innerHTML += marqueeTrack.innerHTML;
+        })();
+    </script>
+
+</body>
+</html>
