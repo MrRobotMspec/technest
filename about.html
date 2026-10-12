@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Tech Nest — Digital Solutions for South African Businesses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #F5F1ED;
+            --bg-secondary: #E6DFD7;
+            --surface-1: #D9D0C5;
+            --surface-2: #C4B9AC;
+            --brown-dark: #4A3F35;
+            --brown-medium: #7A6A58;
+            --brown-warm: #9C8B7A;
+            --metal-light: #B8B2A8;
+            --metal-mid: #8F8A81;
+            --metal-dark: #5C5954;
+            --text-primary: #2E2A26;
+            --text-secondary: #5A5249;
+            --text-light: #F5F1ED;
+            --accent-brown: #8B7355;
+            --accent-grey: #A8A8A8;
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== PRELOADER ===== */
+        .preloader {
+            position: fixed; inset: 0; background: var(--bg-primary);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100000; transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .preloader.hidden { opacity: 0; visibility: hidden; }
+        .preloader-logo {
+            font-size: 2rem; font-weight: 900; letter-spacing: -0.03em;
+            margin-bottom: 2rem; color: var(--brown-medium);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+        .preloader-bar {
+            width: 200px; height: 3px; background: rgba(74,63,53,0.15);
+            border-radius: 3px; overflow: hidden;
+        }
+        .preloader-bar-inner {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            border-radius: 3px; animation: loadBar 1.8s ease-in-out forwards;
+        }
+        @keyframes loadBar { 0%{width:0%} 100%{width:100%} }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 1.5rem 3rem;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: var(--transition); background: transparent;
+        }
+        .nav.scrolled {
+            background: rgba(245,241,237,0.95); backdrop-filter: blur(20px);
+            padding: 1rem 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .nav-logo {
+            font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em;
+            color: var(--text-primary); text-decoration: none;
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .nav-logo span { color: var(--brown-medium); }
+        .nav-logo i { color: var(--brown-warm); font-size: 1.2rem; }
+
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; letter-spacing: 0.02em; transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0;
+            height: 2px; background: var(--brown-medium); transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--brown-dark); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--brown-medium); font-weight: 600; }
+        .nav-links a.active::after { width: 100%; }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED !important; padding: 0.6rem 1.5rem; border-radius: 50px;
+            font-weight: 600 !important; transition: var(--transition);
+            box-shadow: 0 8px 20px -5px rgba(122,106,88,0.3);
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 25px -5px rgba(122,106,88,0.5); }
+        .nav-cta::after { display: none; }
+
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001;
+        }
+        .hamburger span {
+            width: 25px; height: 2px; background: var(--text-primary); transition: var(--transition);
+        }
+
+        /* ===== SECTION STYLES ===== */
+        .section { padding: 6rem 3rem; position: relative; background: var(--bg-primary); }
+        .section-header { margin-bottom: 3.5rem; }
+        .section-label {
+            font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--brown-medium);
+            margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .section-label::before {
+            content: ''; width: 30px; height: 2px; background: var(--brown-medium);
+        }
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800;
+            letter-spacing: -0.02em; line-height: 1.15; max-width: 700px;
+            color: var(--text-primary);
+        }
+
+        /* ===== PAGE HERO ===== */
+        .page-hero {
+            min-height: 55vh; display: flex; align-items: center;
+            position: relative; padding: 8rem 3rem 4rem;
+            overflow: hidden; background: var(--bg-primary);
+        }
+        .page-hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .page-hero-bg .shape {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            opacity: 0.06; animation: floatShape 20s infinite ease-in-out;
+        }
+        .page-hero-bg .shape-1 {
+            width: 500px; height: 500px; background: var(--brown-medium);
+            top: -10%; right: -5%;
+        }
+        .page-hero-bg .shape-2 {
+            width: 400px; height: 400px; background: var(--metal-mid);
+            bottom: -15%; left: -5%; animation-delay: -5s;
+        }
+        @keyframes floatShape {
+            0%,100% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(40px,-40px) scale(1.1); }
+            50% { transform: translate(-30px,30px) scale(0.95); }
+            75% { transform: translate(20px,20px) scale(1.05); }
+        }
+        .page-hero-content { position: relative; z-index: 2; max-width: 900px; }
+        .page-hero-tagline {
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--brown-medium);
+            margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .page-hero-tagline::before {
+            content: ''; width: 40px; height: 2px; background: var(--brown-medium);
+        }
+        .page-hero h1 {
+            font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 900;
+            line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        .page-hero h1 .highlight { color: var(--brown-medium); }
+        .page-hero p {
+            font-size: 1.1rem; color: var(--text-secondary); max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            padding: 1rem 2.2rem; border-radius: 50px; font-weight: 600;
+            font-size: 0.95rem; text-decoration: none; transition: var(--transition);
+            border: none; letter-spacing: 0.02em; font-family: inherit;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED; box-shadow: 0 10px 30px -8px rgba(122,106,88,0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 40px -10px rgba(122,106,88,0.6);
+        }
+
+        /* ===== ABOUT GRID ===== */
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+            align-items: start; max-width: 1200px; margin: 0 auto;
+        }
+        .about-text p {
+            font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        .about-text p strong { color: var(--text-primary); font-weight: 700; }
+        .about-text .highlight-box {
+            background: var(--bg-secondary); border-left: 4px solid var(--brown-medium);
+            padding: 1.5rem 2rem; border-radius: 0 16px 16px 0;
+            margin: 2rem 0; font-style: italic; color: var(--text-secondary);
+        }
+
+        .about-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem;
+        }
+        .about-stat {
+            background: var(--bg-secondary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 20px; padding: 1.8rem 1.5rem; text-align: center;
+            transition: var(--transition);
+        }
+        .about-stat:hover {
+            background: var(--surface-1); transform: translateY(-5px);
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.15);
+        }
+        .about-stat-number {
+            font-size: 2.5rem; font-weight: 900; color: var(--brown-medium);
+            line-height: 1; margin-bottom: 0.5rem;
+        }
+        .about-stat-label {
+            font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;
+        }
+
+        .profile-card {
+            background: var(--bg-secondary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 28px; padding: 2.5rem 2rem; position: relative;
+            overflow: hidden; transition: var(--transition);
+        }
+        .profile-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+        }
+        .profile-avatar {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--brown-warm), var(--metal-mid));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; color: #F5F1ED; margin-bottom: 1.5rem;
+            font-weight: 900; letter-spacing: -0.02em;
+        }
+        .profile-card h3 {
+            font-size: 1.5rem; font-weight: 800; margin-bottom: 0.3rem;
+            color: var(--text-primary);
+        }
+        .profile-role {
+            font-size: 0.9rem; color: var(--brown-medium); font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+        .profile-card p {
+            font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .profile-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .profile-tag {
+            font-size: 0.75rem; font-weight: 600; padding: 0.4rem 1rem;
+            border-radius: 50px; background: rgba(122,106,88,0.12);
+            color: var(--brown-medium); letter-spacing: 0.02em;
+        }
+
+        /* ===== EXPERTISE ===== */
+        .expertise-section { background: rgba(230,223,215,0.3); }
+        .expertise-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+            max-width: 1100px; margin: 0 auto;
+        }
+        .expertise-card {
+            background: var(--bg-primary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 24px; padding: 2.5rem 2rem; transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .expertise-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
+        }
+        .expertise-card:hover::before { transform: scaleX(1); }
+        .expertise-card:hover {
+            background: var(--bg-secondary); transform: translateY(-8px);
+            border-color: rgba(122,106,88,0.25);
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.15);
+        }
+        .expertise-icon {
+            width: 60px; height: 60px; border-radius: 16px;
+            background: rgba(122,106,88,0.1); display: flex; align-items: center;
+            justify-content: center; font-size: 1.6rem; color: var(--brown-medium);
+            margin-bottom: 1.5rem; transition: var(--transition);
+        }
+        .expertise-card:hover .expertise-icon {
+            transform: scale(1.1) rotate(-5deg);
+            background: var(--brown-medium); color: #F5F1ED;
+        }
+        .expertise-card h3 {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .expertise-card ul {
+            list-style: none; display: flex; flex-direction: column; gap: 0.8rem;
+        }
+        .expertise-card ul li {
+            font-size: 0.9rem; color: var(--text-secondary); display: flex;
+            align-items: flex-start; gap: 0.7rem; line-height: 1.6;
+        }
+        .expertise-card ul li i {
+            color: var(--brown-medium); font-size: 0.8rem; margin-top: 0.3rem;
+        }
+
+        /* ===== PORTFOLIO SHOWCASE ===== */
+        .portfolio-showcase {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+            max-width: 1100px; margin: 0 auto;
+        }
+        .portfolio-item {
+            background: var(--bg-secondary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 24px; overflow: hidden; transition: var(--transition);
+        }
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 40px -20px rgba(0,0,0,0.2);
+        }
+        .portfolio-image { height: 220px; position: relative; overflow: hidden; }
+        .portfolio-image .placeholder-img {
+            width: 100%; height: 100%; display: flex; align-items: center;
+            justify-content: center; font-size: 3rem; color: rgba(255,255,255,0.3);
+            transition: transform 0.6s ease;
+        }
+        .portfolio-item:hover .placeholder-img { transform: scale(1.08); }
+        .portfolio-img-1 { background: linear-gradient(135deg, #9C8B7A, #C4B9AC); }
+        .portfolio-img-2 { background: linear-gradient(135deg, #7A6A58, #B8B2A8); }
+        .portfolio-content { padding: 2rem; }
+        .portfolio-category {
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--brown-medium); margin-bottom: 0.5rem;
+        }
+        .portfolio-content h3 {
+            font-size: 1.3rem; font-weight: 700; margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+        .portfolio-content p {
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: 1.2rem;
+        }
+        .portfolio-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .portfolio-tag {
+            font-size: 0.7rem; font-weight: 600; padding: 0.3rem 0.8rem;
+            border-radius: 50px; background: rgba(122,106,88,0.12);
+            color: var(--brown-medium);
+        }
+
+        /* ===== VALUES ===== */
+        .values-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+            max-width: 1100px; margin: 0 auto;
+        }
+        .value-card {
+            background: var(--bg-secondary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 24px; padding: 2.5rem 2rem; text-align: center;
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .value-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
+        }
+        .value-card:hover::before { transform: scaleX(1); }
+        .value-card:hover {
+            background: var(--surface-1); transform: translateY(-8px);
+            border-color: rgba(122,106,88,0.25);
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.15);
+        }
+        .value-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: rgba(122,106,88,0.1); display: flex; align-items: center;
+            justify-content: center; font-size: 1.6rem; color: var(--brown-medium);
+            margin: 0 auto 1.5rem; transition: var(--transition);
+        }
+        .value-card:hover .value-icon {
+            background: var(--brown-medium); color: #F5F1ED;
+            transform: scale(1.1) rotate(5deg);
+        }
+        .value-card h3 {
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+        .value-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; }
+
+        /* ===== CTA ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--brown-dark), var(--brown-medium));
+            padding: 5rem 3rem; text-align: center; position: relative; overflow: hidden;
+        }
+        .cta-section::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: rotate 30s linear infinite;
+        }
+        @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+        .cta-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+        .cta-content h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900;
+            color: #F5F1ED; margin-bottom: 1rem; letter-spacing: -0.02em;
+        }
+        .cta-content p {
+            font-size: 1.1rem; color: rgba(245,241,237,0.85); margin-bottom: 2rem;
+        }
+        .cta-content .btn-light {
+            background: #F5F1ED; color: var(--brown-dark);
+            box-shadow: 0 10px 30px -8px rgba(0,0,0,0.3);
+        }
+        .cta-content .btn-light:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 3rem; border-top: 1px solid rgba(74,63,53,0.08);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1.5rem; background: var(--bg-primary);
+        }
+        .footer-logo {
+            font-size: 1.3rem; font-weight: 900; letter-spacing: -0.03em;
+            display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);
+        }
+        .footer-logo span { color: var(--brown-medium); }
+        .footer-copy { font-size: 0.8rem; color: var(--text-secondary); }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a {
+            font-size: 0.85rem; color: var(--text-secondary); text-decoration: none;
+            transition: var(--transition);
+        }
+        .footer-links a:hover { color: var(--brown-medium); }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .expertise-grid { grid-template-columns: 1fr; }
+            .portfolio-showcase { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav.scrolled { padding: 0.8rem 1.5rem; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+                background: rgba(245,241,237,0.98); backdrop-filter: blur(20px);
+                flex-direction: column; justify-content: center; gap: 2rem;
+                transition: right 0.4s ease; padding: 2rem;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            .nav-links.open { right: 0; }
+            .hamburger { display: flex; }
+            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+            .page-hero { padding: 6rem 1.5rem 3rem; min-height: 45vh; }
+            .section { padding: 4rem 1.5rem; }
+            .values-grid { grid-template-columns: 1fr; }
+            .about-stats { grid-template-columns: 1fr 1fr; }
+            .footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+            .cta-section { padding: 4rem 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .page-hero h1 { font-size: 2rem; }
+            .section-title { font-size: 1.5rem; }
+            .about-stats { grid-template-columns: 1fr; }
+            .btn { padding: 0.8rem 1.6rem; font-size: 0.85rem; }
+            .profile-card { padding: 1.8rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">TECH NEST</div>
+        <div class="preloader-bar"><div class="preloader-bar-inner"></div></div>
+    </div>
+
+    <nav class="nav" id="nav">
+        <a href="index.html" class="nav-logo">
+            <i class="fas fa-leaf"></i><span>Tech</span> Nest
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html#work">Work</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="index.html#testimonials">Testimonials</a></li>
+            <li><a href="contact.html" class="nav-cta">Start a Project</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="page-hero-bg">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+        <div class="page-hero-content">
+            <div class="page-hero-tagline">About Tech Nest</div>
+            <h1>Building Digital Foundations for <span class="highlight">South African Business.</span></h1>
+            <p>We are a Johannesburg-based digital solutions team with deep expertise in web development, domain hosting management, and Microsoft licensing — helping businesses establish, operate, and grow online.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="about-grid">
+            <div class="about-text reveal">
+                <div class="section-label">Who We Are</div>
+                <h2 class="section-title" style="margin-bottom: 2rem;">A technology partner invested in your business success.</h2>
+                <p>Tech Nest was founded on a simple principle: <strong>technology should work for your business, not the other way around.</strong> We combine technical depth with a practical understanding of how South African SMEs and organizations operate.</p>
+                <p>Our team brings together specialists in <strong>domain hosting management</strong> and <strong>Microsoft license purchasing and maintenance</strong> — ensuring your digital infrastructure is reliable, compliant, and cost-effective. We manage the technical complexity so you can focus on running your business.</p>
+                <p>From your first website to enterprise-grade business systems, we build solutions that are secure, scalable, and tailored to your exact requirements.</p>
+                <div class="highlight-box">
+                    "We don't just build websites — we build the digital foundation your business needs to operate, compete, and grow in a connected world."
+                </div>
+                <div class="about-stats">
+                    <div class="about-stat">
+                        <div class="about-stat-number" data-target="50">0</div>
+                        <div class="about-stat-label">Projects Completed</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number" data-target="40">0</div>
+                        <div class="about-stat-label">Business Clients</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number" data-target="100">0</div>
+                        <div class="about-stat-label">Successful Deployments</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number" data-target="5">0</div>
+                        <div class="about-stat-label">Years in Business</div>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="profile-card">
+                    <div class="profile-avatar">TN</div>
+                    <h3>Tech Nest Team</h3>
+                    <div class="profile-role">Digital Solutions & Infrastructure Specialists</div>
+                    <p>Our multidisciplinary team brings together expertise in web development, cloud infrastructure, domain management, and Microsoft 365 administration. We are problem-solvers first, technologists second.</p>
+                    <p>Every project is led by a senior developer who understands both the technical and business dimensions — ensuring solutions that are elegant, maintainable, and commercially sound.</p>
+                    <div class="profile-tags">
+                        <span class="profile-tag">Web Development</span>
+                        <span class="profile-tag">Domain Hosting</span>
+                        <span class="profile-tag">Microsoft 365</span>
+                        <span class="profile-tag">Cloud Infrastructure</span>
+                        <span class="profile-tag">UI/UX Design</span>
+                        <span class="profile-tag">Business Systems</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section expertise-section">
+        <div class="section-header reveal" style="max-width: 1100px; margin: 0 auto 3.5rem;">
+            <div class="section-label">Core Expertise</div>
+            <h2 class="section-title">Deep experience in digital infrastructure.</h2>
+        </div>
+        <div class="expertise-grid">
+            <div class="expertise-card reveal">
+                <div class="expertise-icon"><i class="fas fa-server"></i></div>
+                <h3>Domain Hosting Management</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                    We manage the complete lifecycle of your domain and hosting environment — from registration and DNS configuration to server optimization and uptime monitoring.
+                </p>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Domain registration, transfer, and renewal management</li>
+                    <li><i class="fas fa-check-circle"></i> DNS configuration and advanced record management</li>
+                    <li><i class="fas fa-check-circle"></i> Shared, VPS, and dedicated hosting setup and migration</li>
+                    <li><i class="fas fa-check-circle"></i> SSL certificate installation and renewal</li>
+                    <li><i class="fas fa-check-circle"></i> Uptime monitoring, backups, and security hardening</li>
+                    <li><i class="fas fa-check-circle"></i> Email deliverability and DNS authentication (SPF, DKIM, DMARC)</li>
+                </ul>
+            </div>
+            <div class="expertise-card reveal">
+                <div class="expertise-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Microsoft License Purchasing & Maintenance</h3>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                    We help businesses navigate Microsoft's licensing landscape — ensuring you have the right licenses, at the right price, with ongoing support and compliance.
+                </p>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Microsoft 365 Business & Enterprise license procurement</li>
+                    <li><i class="fas fa-check-circle"></i> License optimization and cost reduction analysis</li>
+                    <li><i class="fas fa-check-circle"></i> Tenant setup, user provisioning, and migration</li>
+                    <li><i class="fas fa-check-circle"></i> Exchange Online, SharePoint, and Teams configuration</li>
+                    <li><i class="fas fa-check-circle"></i> Ongoing license management and renewal tracking</li>
+                    <li><i class="fas fa-check-circle"></i> Compliance auditing and security baseline configuration</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header reveal" style="max-width: 1100px; margin: 0 auto 3.5rem;">
+            <div class="section-label">Portfolio Highlights</div>
+            <h2 class="section-title">Projects that demonstrate our capability.</h2>
+        </div>
+        <div class="portfolio-showcase">
+            <div class="portfolio-item reveal">
+                <div class="portfolio-image">
+                    <div class="placeholder-img portfolio-img-1"><i class="fas fa-spa"></i></div>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-category">Completed Website Project</div>
+                    <h3>Trust the Process — Wellness Platform</h3>
+                    <p>A complete digital presence for a South African wellness business. We designed and developed a professional website that showcases services, builds community, and converts visitors into clients. The project included custom UI/UX design, responsive development, SEO optimization, and ongoing hosting management.</p>
+                    <div class="portfolio-tags">
+                        <span class="portfolio-tag">Web Design</span>
+                        <span class="portfolio-tag">Development</span>
+                        <span class="portfolio-tag">SEO</span>
+                        <span class="portfolio-tag">Hosting</span>
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-item reveal">
+                <div class="portfolio-image">
+                    <div class="placeholder-img portfolio-img-2"><i class="fas fa-handshake"></i></div>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-category">Web Application</div>
+                    <h3>BrokerBridge — Insurance Intermediary Platform</h3>
+                    <p>An administrative tool designed for insurance firms, functioning as a secure intermediary between customers and insurance companies. The platform streamlines quoting, policy management, and client communication — reducing administrative overhead and improving service delivery.</p>
+                    <div class="portfolio-tags">
+                        <span class="portfolio-tag">Web App</span>
+                        <span class="portfolio-tag">Insurance Tech</span>
+                        <span class="portfolio-tag">Admin Dashboard</span>
+                        <span class="portfolio-tag">API Integration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: rgba(230,223,215,0.3);">
+        <div class="section-header reveal" style="max-width: 1100px; margin: 0 auto 3.5rem;">
+            <div class="section-label">Why Tech Nest</div>
+            <h2 class="section-title">The values that drive every project.</h2>
+        </div>
+        <div class="values-grid">
+            <div class="value-card reveal">
+                <div class="value-icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>Attention</h3>
+                <p>We capture your audience's attention with modern, professional digital experiences that reflect your brand's unique identity and values.</p>
+            </div>
+            <div class="value-card reveal">
+                <div class="value-icon"><i class="fas fa-heart"></i></div>
+                <h3>Interest</h3>
+                <p>We build interest through engaging design, clear messaging, and intuitive user journeys that keep visitors exploring your business.</p>
+            </div>
+            <div class="value-card reveal">
+                <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3>Desire</h3>
+                <p>We create desire by demonstrating real value — showcasing your services, building trust, and positioning your business as the obvious choice.</p>
+            </div>
+            <div class="value-card reveal">
+                <div class="value-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Action</h3>
+                <p>We drive action with clear calls-to-action, seamless contact options, and conversion-optimized layouts that turn visitors into customers.</p>
+            </div>
+            <div class="value-card reveal">
+                <div class="value-icon"><i class="fas fa-handshake"></i></div>
+                <h3>Partnership</h3>
+                <p>We become an extension of your team — providing ongoing support, maintenance, and strategic guidance as your business evolves.</p>
+            </div>
+            <div class="value-card reveal">
+                <div class="value-icon"><i class="fas fa-chart-bar"></i></div>
+                <h3>Results</h3>
+                <p>We measure success by your outcomes — more leads, better engagement, streamlined operations, and measurable business growth.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content reveal">
+            <h2>Ready to build your digital foundation?</h2>
+            <p>Let's discuss how Tech Nest can help your business establish, operate, and grow online with reliable hosting, licensing, and web solutions.</p>
+            <a href="contact.html" class="btn btn-light">
+                <i class="fas fa-paper-plane"></i> Start a Conversation
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-logo"><i class="fas fa-leaf"></i><span>Tech</span> Nest</div>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-copy">© 2025 Tech Nest. Technology that works for your business. Johannesburg, South Africa.</div>
+    </footer>
+
+    <script>
+        (function() {
+            'use strict';
+            gsap.registerPlugin(ScrollTrigger);
+
+            const preloader = document.getElementById('preloader');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    setTimeout(() => ScrollTrigger.refresh(), 200);
+                }, 1800);
+            });
+
+            const nav = document.getElementById('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            });
+
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('open');
+            });
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('open');
+                });
+            });
+
+            ScrollTrigger.batch('.reveal', {
+                start: 'top 88%',
+                onEnter: (batch) => {
+                    gsap.to(batch, {
+                        opacity: 1, y: 0, stagger: 0.1, duration: 0.9,
+                        ease: 'power3.out', overwrite: 'auto'
+                    });
+                },
+                once: true,
+                interval: 0.1
+            });
+
+            document.querySelectorAll('.about-stat-number').forEach(el => {
+                const target = parseInt(el.getAttribute('data-target'));
+                const obj = { val: 0 };
+                gsap.to(obj, {
+                    val: target, duration: 2.2, ease: 'power2.out',
+                    scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+                    onUpdate: () => { el.textContent = Math.floor(obj.val); },
+                    onComplete: () => { el.textContent = target + '+'; }
+                });
+            });
+
+            document.querySelectorAll('.expertise-card, .value-card, .portfolio-item').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, { y: -8, scale: 1.01, duration: 0.35, ease: 'power2.out',
+                        boxShadow: '0 22px 35px -18px rgba(74, 63, 53, 0.35)' });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, { y: 0, scale: 1, duration: 0.4, ease: 'power2.out', boxShadow: 'none' });
+                });
+            });
+
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', () => gsap.to(btn, { scale: 1.03, duration: 0.3 }));
+                btn.addEventListener('mouseleave', () => gsap.to(btn, { scale: 1, duration: 0.3 }));
+            });
+
+            window.addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 1000));
+        })();
+    </script>
+</body>
+</html>
