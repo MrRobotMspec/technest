@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Tech Nest — Hosting, Domains & Microsoft 365</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #F5F1ED;
+            --bg-secondary: #E6DFD7;
+            --surface-1: #D9D0C5;
+            --surface-2: #C4B9AC;
+            --brown-dark: #4A3F35;
+            --brown-medium: #7A6A58;
+            --brown-warm: #9C8B7A;
+            --metal-light: #B8B2A8;
+            --metal-mid: #8F8A81;
+            --metal-dark: #5C5954;
+            --text-primary: #2E2A26;
+            --text-secondary: #5A5249;
+            --text-light: #F5F1ED;
+            --accent-brown: #8B7355;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed; inset: 0; background: var(--bg-primary);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100000; transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .preloader.hidden { opacity: 0; visibility: hidden; }
+        .preloader-logo {
+            font-size: 2rem; font-weight: 900; letter-spacing: -0.03em;
+            margin-bottom: 2rem; color: var(--brown-medium);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+        .preloader-bar {
+            width: 200px; height: 3px; background: rgba(74,63,53,0.15);
+            border-radius: 3px; overflow: hidden;
+        }
+        .preloader-bar-inner {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            border-radius: 3px; animation: loadBar 1.8s ease-in-out forwards;
+        }
+        @keyframes loadBar { 0%{width:0%} 100%{width:100%} }
+
+        /* Navigation */
+        .nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 1.5rem 3rem;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: var(--transition); background: transparent;
+        }
+        .nav.scrolled {
+            background: rgba(245,241,237,0.95); backdrop-filter: blur(20px);
+            padding: 1rem 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .nav-logo {
+            font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em;
+            color: var(--text-primary); text-decoration: none;
+            display: flex; align-items: center; gap: 0.6rem;
+        }
+        .nav-logo span { color: var(--brown-medium); }
+        .nav-logo i { color: var(--brown-warm); font-size: 1.2rem; }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; letter-spacing: 0.02em; transition: var(--transition);
+            position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0;
+            height: 2px; background: var(--brown-medium); transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--brown-dark); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--brown-medium); font-weight: 600; }
+        .nav-links a.active::after { width: 100%; }
+        .nav-cta {
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED !important; padding: 0.6rem 1.5rem; border-radius: 50px;
+            font-weight: 600 !important; transition: var(--transition);
+            box-shadow: 0 8px 20px -5px rgba(122,106,88,0.3);
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 25px -5px rgba(122,106,88,0.5); }
+        .nav-cta::after { display: none; }
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001;
+        }
+        .hamburger span {
+            width: 25px; height: 2px; background: var(--text-primary); transition: var(--transition);
+        }
+
+        /* Section base */
+        .section { padding: 6rem 3rem; position: relative; background: var(--bg-primary); }
+        .section-header { margin-bottom: 3.5rem; }
+        .section-label {
+            font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--brown-medium);
+            margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .section-label::before {
+            content: ''; width: 30px; height: 2px; background: var(--brown-medium);
+        }
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800;
+            letter-spacing: -0.02em; line-height: 1.15; max-width: 700px;
+            color: var(--text-primary);
+        }
+
+        /* Page Hero */
+        .page-hero {
+            min-height: 55vh; display: flex; align-items: center;
+            position: relative; padding: 8rem 3rem 4rem;
+            overflow: hidden; background: var(--bg-primary);
+        }
+        .page-hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .page-hero-bg .shape {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            opacity: 0.06; animation: floatShape 20s infinite ease-in-out;
+        }
+        .page-hero-bg .shape-1 {
+            width: 500px; height: 500px; background: var(--brown-medium);
+            top: -10%; right: -5%;
+        }
+        .page-hero-bg .shape-2 {
+            width: 400px; height: 400px; background: var(--metal-mid);
+            bottom: -15%; left: -5%; animation-delay: -5s;
+        }
+        @keyframes floatShape {
+            0%,100% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(40px,-40px) scale(1.1); }
+            50% { transform: translate(-30px,30px) scale(0.95); }
+            75% { transform: translate(20px,20px) scale(1.05); }
+        }
+        .page-hero-content { position: relative; z-index: 2; max-width: 900px; }
+        .page-hero-tagline {
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--brown-medium);
+            margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .page-hero-tagline::before {
+            content: ''; width: 40px; height: 2px; background: var(--brown-medium);
+        }
+        .page-hero h1 {
+            font-size: clamp(2.2rem, 6vw, 4.5rem); font-weight: 900;
+            line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        .page-hero h1 .highlight { color: var(--brown-medium); }
+        .page-hero p {
+            font-size: 1.1rem; color: var(--text-secondary); max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            padding: 1rem 2.2rem; border-radius: 50px; font-weight: 600;
+            font-size: 0.95rem; text-decoration: none; transition: var(--transition);
+            border: none; letter-spacing: 0.02em; font-family: inherit;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brown-medium), var(--brown-warm));
+            color: #F5F1ED; box-shadow: 0 10px 30px -8px rgba(122,106,88,0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 40px -10px rgba(122,106,88,0.6);
+        }
+        .btn-outline {
+            background: transparent; color: var(--text-primary);
+            border: 2px solid var(--metal-light);
+        }
+        .btn-outline:hover {
+            border-color: var(--brown-medium); color: var(--brown-medium);
+            transform: translateY(-3px);
+        }
+
+        /* Services detailed grid */
+        .services-detailed {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-detail-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 28px;
+            padding: 2.5rem 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .service-detail-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
+        }
+        .service-detail-card:hover::before { transform: scaleX(1); }
+        .service-detail-card:hover {
+            background: var(--surface-1);
+            transform: translateY(-10px);
+            border-color: rgba(122,106,88,0.25);
+            box-shadow: 0 24px 40px -20px rgba(0,0,0,0.2);
+        }
+        .service-detail-icon {
+            width: 70px; height: 70px; border-radius: 20px;
+            background: rgba(122,106,88,0.12);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: var(--brown-medium);
+            margin-bottom: 1.8rem; transition: var(--transition);
+        }
+        .service-detail-card:hover .service-detail-icon {
+            background: var(--brown-medium); color: #F5F1ED;
+            transform: scale(1.1) rotate(-5deg);
+        }
+        .service-detail-card h3 {
+            font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .service-detail-card > p {
+            font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .service-value {
+            background: rgba(122,106,88,0.08);
+            border-left: 3px solid var(--brown-medium);
+            padding: 1rem 1.2rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 1.5rem;
+        }
+        .service-value strong {
+            display: block; font-size: 0.75rem; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--brown-medium);
+            margin-bottom: 0.4rem;
+        }
+        .service-value span {
+            font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;
+        }
+        .service-features {
+            list-style: none; display: flex; flex-direction: column;
+            gap: 0.7rem; margin-bottom: 2rem; flex-grow: 1;
+        }
+        .service-features li {
+            font-size: 0.88rem; color: var(--text-secondary);
+            display: flex; align-items: flex-start; gap: 0.7rem; line-height: 1.6;
+        }
+        .service-features li i {
+            color: var(--brown-medium); font-size: 0.8rem; margin-top: 0.35rem;
+        }
+        .service-cta {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 700; color: var(--brown-medium);
+            text-decoration: none; transition: var(--transition);
+            margin-top: auto; letter-spacing: 0.02em;
+        }
+        .service-cta:hover { gap: 0.8rem; color: var(--brown-dark); }
+
+        /* AIDA process section */
+        .aida-section {
+            background: rgba(230,223,215,0.3);
+        }
+        .aida-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+        }
+        .aida-card {
+            background: var(--bg-primary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 24px; padding: 2.2rem 1.8rem; transition: var(--transition);
+            position: relative; overflow: hidden; text-align: center;
+        }
+        .aida-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease;
+        }
+        .aida-card:hover::before { transform: scaleX(1); }
+        .aida-card:hover {
+            background: var(--bg-secondary); transform: translateY(-8px);
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.15);
+        }
+        .aida-letter {
+            font-size: 3rem; font-weight: 900;
+            color: var(--brown-medium); line-height: 1;
+            margin-bottom: 0.5rem; opacity: 0.5;
+        }
+        .aida-card h4 {
+            font-size: 1.05rem; font-weight: 700; margin-bottom: 0.7rem;
+            color: var(--text-primary);
+        }
+        .aida-card p {
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;
+        }
+
+        /* Comparison / why us */
+        .why-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+            max-width: 1200px; margin: 0 auto; align-items: center;
+        }
+        .why-text h3 {
+            font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem;
+            color: var(--text-primary); letter-spacing: -0.02em;
+        }
+        .why-text p {
+            font-size: 1rem; color: var(--text-secondary); line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        .why-list {
+            list-style: none; display: flex; flex-direction: column; gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .why-list li {
+            display: flex; align-items: flex-start; gap: 1rem;
+            font-size: 0.95rem; color: var(--text-secondary);
+        }
+        .why-list li i {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: rgba(122,106,88,0.12); color: var(--brown-medium);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; flex-shrink: 0;
+        }
+        .why-list li strong {
+            color: var(--text-primary); display: block; margin-bottom: 0.15rem;
+        }
+        .why-visual {
+            background: var(--bg-secondary); border: 1px solid rgba(74,63,53,0.08);
+            border-radius: 28px; padding: 2.5rem; position: relative;
+        }
+        .why-visual::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--brown-medium), var(--metal-mid));
+            border-radius: 28px 28px 0 0;
+        }
+        .metric-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 0; border-bottom: 1px solid rgba(74,63,53,0.08);
+        }
+        .metric-row:last-child { border-bottom: none; }
+        .metric-label {
+            font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;
+        }
+        .metric-value {
+            font-size: 1.4rem; font-weight: 900; color: var(--brown-medium);
+            letter-spacing: -0.02em;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, var(--brown-dark), var(--brown-medium));
+            padding: 5rem 3rem; text-align: center; position: relative; overflow: hidden;
+        }
+        .cta-section::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: rotate 30s linear infinite;
+        }
+        @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+        .cta-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+        .cta-content h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900;
+            color: #F5F1ED; margin-bottom: 1rem; letter-spacing: -0.02em;
+        }
+        .cta-content p {
+            font-size: 1.1rem; color: rgba(245,241,237,0.85); margin-bottom: 2rem;
+        }
+        .cta-content .btn-light {
+            background: #F5F1ED; color: var(--brown-dark);
+            box-shadow: 0 10px 30px -8px rgba(0,0,0,0.3);
+        }
+        .cta-content .btn-light:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem; border-top: 1px solid rgba(74,63,53,0.08);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1.5rem; background: var(--bg-primary);
+        }
+        .footer-logo {
+            font-size: 1.3rem; font-weight: 900; letter-spacing: -0.03em;
+            display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);
+        }
+        .footer-logo span { color: var(--brown-medium); }
+        .footer-copy { font-size: 0.8rem; color: var(--text-secondary); }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a {
+            font-size: 0.85rem; color: var(--text-secondary); text-decoration: none;
+            transition: var(--transition);
+        }
+        .footer-links a:hover { color: var(--brown-medium); }
+
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .services-detailed { grid-template-columns: repeat(2, 1fr); }
+            .aida-grid { grid-template-columns: repeat(2, 1fr); }
+            .why-grid { grid-template-columns: 1fr; gap: 3rem; }
+        }
+        @media (max-width: 768px) {
+            .nav { padding: 1rem 1.5rem; }
+            .nav.scrolled { padding: 0.8rem 1.5rem; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+                background: rgba(245,241,237,0.98); backdrop-filter: blur(20px);
+                flex-direction: column; justify-content: center; gap: 2rem;
+                transition: right 0.4s ease; padding: 2rem;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            .nav-links.open { right: 0; }
+            .hamburger { display: flex; }
+            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+            .page-hero { padding: 6rem 1.5rem 3rem; min-height: 45vh; }
+            .section { padding: 4rem 1.5rem; }
+            .services-detailed { grid-template-columns: 1fr; }
+            .aida-grid { grid-template-columns: 1fr; }
+            .footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+            .footer-links { justify-content: center; }
+            .cta-section { padding: 4rem 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .page-hero h1 { font-size: 2rem; }
+            .section-title { font-size: 1.5rem; }
+            .btn { padding: 0.8rem 1.6rem; font-size: 0.85rem; }
+            .service-detail-card { padding: 1.8rem 1.4rem; }
+            .why-visual { padding: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">TECH NEST</div>
+        <div class="preloader-bar"><div class="preloader-bar-inner"></div></div>
+    </div>
+
+    <nav class="nav" id="nav">
+        <a href="index.html" class="nav-logo">
+            <i class="fas fa-leaf"></i><span>Tech</span> Nest
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html#work">Work</a></li>
+            <li><a href="services.html" class="active">Services</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#testimonials">Testimonials</a></li>
+            <li><a href="contact.html" class="nav-cta">Start a Project</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="page-hero-bg">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+        <div class="page-hero-content">
+            <div class="page-hero-tagline">Our Services</div>
+            <h1>Hosting, Domains & <span class="highlight">Microsoft 365 — Done Right.</span></h1>
+            <p>Reliable infrastructure, expert configuration, and ongoing support. We take the technical complexity off your plate so your business stays online, secure, and productive.</p>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <a href="#services-detailed" class="btn btn-primary">
+                    <i class="fas fa-cogs"></i> Explore Services
+                </a>
+                <a href="contact.html" class="btn btn-outline">
+                    <i class="fas fa-comments"></i> Request a Quote
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="services-detailed">
+        <div class="section-header reveal" style="max-width: 1200px; margin: 0 auto 3.5rem;">
+            <div class="section-label">Core Offerings</div>
+            <h2 class="section-title">Everything your business needs to operate online.</h2>
+        </div>
+        <div class="services-detailed">
+            <!-- Web Hosting -->
+            <div class="service-detail-card reveal">
+                <div class="service-detail-icon"><i class="fas fa-server"></i></div>
+                <h3>Web Hosting</h3>
+                <p>Fast, secure, and reliable hosting — set up, optimized, and managed for your specific business needs. No cookie-cutter plans, no hidden limitations.</p>
+                <div class="service-value">
+                    <strong>The Value</strong>
+                    <span>99.9% uptime, optimized performance, and proactive monitoring so your website is always available to your customers.</span>
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> Shared, VPS & dedicated hosting setup</li>
+                    <li><i class="fas fa-check-circle"></i> Migration from existing providers (zero downtime)</li>
+                    <li><i class="fas fa-check-circle"></i> SSL certificates & HTTPS enforcement</li>
+                    <li><i class="fas fa-check-circle"></i> Automated backups & disaster recovery</li>
+                    <li><i class="fas fa-check-circle"></i> Performance tuning & caching configuration</li>
+                    <li><i class="fas fa-check-circle"></i> 24/7 uptime monitoring with alerts</li>
+                </ul>
+                <a href="contact.html" class="service-cta">
+                    Get hosting <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Domain Configuration -->
+            <div class="service-detail-card reveal">
+                <div class="service-detail-icon"><i class="fas fa-globe"></i></div>
+                <h3>Domain Configuration</h3>
+                <p>Complete domain management — from registration to advanced DNS configuration and email authentication. We make sure your domain works flawlessly.</p>
+                <div class="service-value">
+                    <strong>The Value</strong>
+                    <span>Your domain is your digital address. We configure it correctly the first time — DNS, SSL, email records — so nothing breaks.</span>
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> Domain registration & transfer management</li>
+                    <li><i class="fas fa-check-circle"></i> Advanced DNS record configuration (A, CNAME, MX, TXT)</li>
+                    <li><i class="fas fa-check-circle"></i> Email authentication: SPF, DKIM, DMARC</li>
+                    <li><i class="fas fa-check-circle"></i> Subdomain setup & management</li>
+                    <li><i class="fas fa-check-circle"></i> Domain forwarding & URL redirection</li>
+                    <li><i class="fas fa-check-circle"></i> Renewal tracking & expiry alerts</li>
+                </ul>
+                <a href="contact.html" class="service-cta">
+                    Configure domains <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Corporate Mailbox Setup -->
+            <div class="service-detail-card reveal">
+                <div class="service-detail-icon"><i class="fas fa-envelope-open-text"></i></div>
+                <h3>Corporate Mailbox Setup</h3>
+                <p>Professional business email on your own domain — configured on Microsoft 365 or Google Workspace, with proper security and mobile access.</p>
+                <div class="service-value">
+                    <strong>The Value</strong>
+                    <span>Build credibility with you@yourcompany.co.za. We handle the setup, security, and migration — you just start emailing.</span>
+                </div>
+                <ul class="service-features">
+                    <li><i class="fas fa-check-circle"></i> Microsoft 365 Business mailbox provisioning</li>
+                    <li><i class="fas fa-check-circle"></i> Google Workspace setup & configuration</li>
+                    <li><i class="fas fa-check-circle"></i> Email migration from existing providers</li>
+                    <li><i class="fas fa-check-circle"></i> Mobile & desktop client configuration</li>
+                    <li><i class="fas fa-check-circle"></i> Spam filtering & security policies</li>
+                    <li><i class="fas fa-check-circle"></i> Shared mailboxes, aliases & distribution lists</li>
+                </ul>
+                <a href="contact.html" class="service-cta">
+                    Set up mailboxes <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AIDA Section -->
+    <section class="section aida-section">
+        <div class="section-header reveal" style="max-width: 1200px; margin: 0 auto 3.5rem;">
+            <div class="section-label">Our Approach</div>
+            <h2 class="section-title">The AIDA framework — applied to every service.</h2>
+        </div>
+        <div class="aida-grid">
+            <div class="aida-card reveal">
+                <div class="aida-letter">A</div>
+                <h4>Attention</h4>
+                <p>We capture your attention with clear service descriptions and transparent pricing — no jargon, no hidden fees.</p>
+            </div>
+            <div class="aida-card reveal">
+                <div class="aida-letter">I</div>
+                <h4>Interest</h4>
+                <p>We build interest by showing exactly how each service solves a real business problem you're facing.</p>
+            </div>
+            <div class="aida-card reveal">
+                <div class="aida-letter">D</div>
+                <h4>Desire</h4>
+                <p>We create desire by demonstrating the value — uptime, security, productivity gains, cost savings.</p>
+            </div>
+            <div class="aida-card reveal">
+                <div class="aida-letter">A</div>
+                <h4>Action</h4>
+                <p>We make it easy to act — direct contact options, clear next steps, and responsive support.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us -->
+    <section class="section">
+        <div class="why-grid">
+            <div class="why-text reveal">
+                <div class="section-label">Why Tech Nest</div>
+                <h3>What sets us apart from other providers.</h3>
+                <p>We're not a faceless hosting reseller. We're a South African technology partner that understands your business context, your budget, and your growth ambitions.</p>
+                <ul class="why-list">
+                    <li>
+                        <i class="fas fa-user-tie"></i>
+                        <div>
+                            <strong>Personal Account Management</strong>
+                            You deal with a real person who knows your setup — not a call center.
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Security-First Configuration</strong>
+                            Every setup includes SSL, firewalls, and security best practices from day one.
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-coins"></i>
+                        <div>
+                            <strong>Cost Optimization</strong>
+                            We audit your existing licenses and infrastructure to eliminate waste.
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Rapid Response</strong>
+                            Urgent issues are addressed within hours — not days.
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Local Expertise</strong>
+                            Johannesburg-based, understanding the South African digital landscape.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="why-visual reveal">
+                <div class="metric-row">
+                    <span class="metric-label">Average Uptime</span>
+                    <span class="metric-value">99.9%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Support Response Time</span>
+                    <span class="metric-value">&lt; 4 hrs</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Client Retention Rate</span>
+                    <span class="metric-value">95%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Hosting Migrations (zero downtime)</span>
+                    <span class="metric-value">100%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Microsoft 365 Licenses Managed</span>
+                    <span class="metric-value">200+</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Years Combined Experience</span>
+                    <span class="metric-value">12+</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content reveal">
+            <h2>Need hosting, a domain, or business email?</h2>
+            <p>Tell us what you need and we'll put together a tailored solution with transparent pricing — usually within 24 hours.</p>
+            <a href="contact.html" class="btn btn-light">
+                <i class="fas fa-paper-plane"></i> Request a Quote
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-logo"><i class="fas fa-leaf"></i><span>Tech</span> Nest</div>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-copy">© 2025 Tech Nest. Technology that works for your business. Johannesburg, South Africa.</div>
+    </footer>
+
+    <script>
+        (function() {
+            'use strict';
+            gsap.registerPlugin(ScrollTrigger);
+
+            const preloader = document.getElementById('preloader');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    setTimeout(() => ScrollTrigger.refresh(), 200);
+                }, 1800);
+            });
+
+            const nav = document.getElementById('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            });
+
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('open');
+            });
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('open');
+                });
+            });
+
+            ScrollTrigger.batch('.reveal', {
+                start: 'top 88%',
+                onEnter: (batch) => {
+                    gsap.to(batch, {
+                        opacity: 1, y: 0, stagger: 0.1, duration: 0.9,
+                        ease: 'power3.out', overwrite: 'auto'
+                    });
+                },
+                once: true, interval: 0.1
+            });
+
+            document.querySelectorAll('.service-detail-card, .aida-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, { y: -8, scale: 1.01, duration: 0.35, ease: 'power2.out',
+                        boxShadow: '0 22px 35px -18px rgba(74, 63, 53, 0.35)' });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, { y: 0, scale: 1, duration: 0.4, ease: 'power2.out', boxShadow: 'none' });
+                });
+            });
+
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', () => gsap.to(btn, { scale: 1.03, duration: 0.3 }));
+                btn.addEventListener('mouseleave', () => gsap.to(btn, { scale: 1, duration: 0.3 }));
+            });
+
+            window.addEventListener('load', () => setTimeout(() => ScrollTrigger.refresh(), 1000));
+        })();
+    </script>
+</body>
+</html>
